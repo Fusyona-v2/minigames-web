@@ -91,31 +91,35 @@
           //const initParams = TG.initParams;
           //const initParamsUnsafe = TG.initParamsUnsafe;
 
-          if (window.Telegram.WebApp) {
+          const urlParams = new URLSearchParams(window.location.search);
 
-            window.Telegram.WebApp.ready();
+          if(urlParams.get('tg') === 'true'){
+            if (window.Telegram.WebApp) {
 
-            var initData = window.Telegram.WebApp.initData;
-            var initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
-     
-            var user = initDataUnsafe.user;
-
-            var userDataJson = {
-              'id' : user.id, 
-              'first_name' : user.first_name,
-              'last_name' : user.last_name,
-              'username' : user.username,
-              'photo_url' : user.photo_url,
-              'auth_date' : initDataUnsafe.auth_date,
-            };
-
-            //if(userDataJson != undefined)
-            unityInstance.SendMessage('LoginManager', 'TgGetPlayerData', JSON.stringify({userDataJson}));
+              window.Telegram.WebApp.ready();
+  
+              var initData = window.Telegram.WebApp.initData;
+              var initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+       
+              var user = initDataUnsafe.user;
+  
+              var userDataJson = {
+                'id' : user.id, 
+                'first_name' : user.first_name,
+                'last_name' : user.last_name,
+                'username' : user.username,
+                'photo_url' : user.photo_url,
+                'auth_date' : initDataUnsafe.auth_date,
+              };
+  
               
+              alert('Is in tg');
+
+              unityInstance.SendMessage('LoginManager', 'TgGetPlayerData', JSON.stringify({userDataJson}));
+                
+            }  
           } else {
             console.log('La aplicación no se está ejecutando dentro de Telegram.');
-
-            unityInstance.SendMessage('WebLogin', 'GetUserData');
 
           }
           
