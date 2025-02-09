@@ -34,11 +34,11 @@
 
       const hideFullScreenButton = "";
       const buildUrl = "Build";
-      const loaderUrl = buildUrl + "/ZapPlay-b.loader.js";
+      const loaderUrl = buildUrl + "/Game.loader.js";
       const config = {
-        dataUrl: buildUrl + "/ZapPlay-b.data",
-        frameworkUrl: buildUrl + "/ZapPlay-b.framework.js",
-        codeUrl: buildUrl + "/ZapPlay-b.wasm",
+        dataUrl: buildUrl + "/Game.data",
+        frameworkUrl: buildUrl + "/Game.framework.js",
+        codeUrl: buildUrl + "/Game.wasm",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Fusyona",
         productName: "ZappPlay",
@@ -93,35 +93,35 @@
 
           const urlParams = new URLSearchParams(window.location.search);
 
-          if(urlParams.get('tg') === 'true'){
-            if (window.Telegram.WebApp) {
+          if (urlParams.get('tg') === 'true') {
+              if (window.Telegram.WebApp) {
 
-              window.Telegram.WebApp.ready();
-  
-              var initData = window.Telegram.WebApp.initData;
-              var initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
-       
-              var user = initDataUnsafe.user;
-  
-              var userDataJson = {
-                'id' : user.id, 
-                'first_name' : user.first_name,
-                'last_name' : user.last_name,
-                'username' : user.username,
-                'photo_url' : user.photo_url,
-                'auth_date' : initDataUnsafe.auth_date,
-              };
-  
-              
-              alert('Is in tg');
+                  window.Telegram.WebApp.ready();
 
-              unityInstance.SendMessage('LoginManager', 'TgGetPlayerData', JSON.stringify({userDataJson}));
-                
-            }  
+                  var initData = window.Telegram.WebApp.initData;
+                  var initDataUnsafe = window.Telegram.WebApp.initDataUnsafe;
+
+                  var user = initDataUnsafe.user;
+
+                  var userDataJson = {
+                      'id': user.id,
+                      'first_name': user.first_name,
+                      'last_name': user.last_name,
+                      'username': user.username,
+                      'photo_url': user.photo_url,
+                      'auth_date': initDataUnsafe.auth_date,
+                  };
+
+                  alert("Is in Tg");
+
+                  unityInstance.SendMessage('LoginManager', 'TgGetPlayerData', JSON.stringify({ userDataJson }));
+
+              }
           } else {
-            console.log('La aplicación no se está ejecutando dentro de Telegram.');
+               console.log('La aplicación no se está ejecutando dentro de Telegram.');
+               unityInstance.SendMessage('LoginManager', 'WebGetPlayerData');
 
-          }
+           }
           
           //TelegramGameProxy.ready();
 
