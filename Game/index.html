@@ -28,87 +28,97 @@
       </div>
     </div>
     <script>
-      const hideFullScreenButton = "";
-      const buildUrl = "Build";
-      const loaderUrl = buildUrl + "/Game.loader.js";
-      const config = {
-        dataUrl: buildUrl + "/Game.data",
-        frameworkUrl: buildUrl + "/Game.framework.js",
-        codeUrl: buildUrl + "/Game.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "Fusyona",
-        productName: "ZappPlay",
-        productVersion: "1.0",
-      };
 
-      const container = document.querySelector("#unity-container");
-      const canvas = document.querySelector("#unity-canvas");
-      const loadingCover = document.querySelector("#loading-cover");
-      const progressBarEmpty = document.querySelector(
-        "#unity-progress-bar-empty"
-      );
-      const progressBarFull = document.querySelector(
-        "#unity-progress-bar-full"
-      );
-      const spinner = document.querySelector(".spinner");
+            const hideFullScreenButton = "";
+            const buildUrl = "Build";
+            const loaderUrl = buildUrl + "/Game.loader.js";
+            const config = {
+              dataUrl: buildUrl + "/Game.data",
+              frameworkUrl: buildUrl + "/Game.framework.js",
+              codeUrl: buildUrl + "/Game.wasm",
+              streamingAssetsUrl: "StreamingAssets",
+              companyName: "Fusyona",
+              productName: "ZappPlay",
+              productVersion: "1.0",
+            };
 
-      const canFullscreen = (function () {
-        for (const key of [
-          "exitFullscreen",
-          "webkitExitFullscreen",
-          "webkitCancelFullScreen",
-          "mozCancelFullScreen",
-          "msExitFullscreen",
-        ]) {
-          if (key in document) {
-            return true;
-          }
-        }
-        return false;
-      })();
+            const container = document.querySelector("#unity-container");
+            const canvas = document.querySelector("#unity-canvas");
+            const loadingCover = document.querySelector("#loading-cover");
+            const progressBarEmpty = document.querySelector("#unity-progress-bar-empty");
+            const progressBarFull = document.querySelector("#unity-progress-bar-full");
+            const spinner = document.querySelector('.spinner');
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        container.className = "unity-mobile";
-        config.devicePixelRatio = 1;
-      }
-      loadingCover.style.display = "";
+            const canFullscreen = (function() {
+              for (const key of [
+                  'exitFullscreen',
+                  'webkitExitFullscreen',
+                  'webkitCancelFullScreen',
+                  'mozCancelFullScreen',
+                  'msExitFullscreen',
+                ]) {
+                if (key in document) {
+                  return true;
+                }
+              }
+              return false;
+            }());
 
-      const script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          spinner.style.display = "none";
-          progressBarEmpty.style.display = "";
-          progressBarFull.style.width = `${100 * progress}%`;
-        })
-          .then((unityInstance) => {
-            loadingCover.style.display = "none";
-
-            window.unityInstance = unityInstance;
-
-            const urlParams = new URLSearchParams(window.location.search);
-
-            if (urlParams.get("tg") && window.Telegram.WebApp) {
-              window.Telegram.WebApp.ready();
-              var initData = window.Telegram.WebApp.initData;
-
-              unityInstance.SendMessage(
-                "LoginManager",
-                "TgGetPlayerData",
-                initData
-              );
-            } else {
-              console.log(
-                "La aplicación no se está ejecutando dentro de Telegram."
-              );
-              unityInstance.SendMessage("LoginManager", "WebGetPlayerData");
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+              container.className = "unity-mobile";
+              config.devicePixelRatio = 1;
             }
-          })
-          .catch((message) => {
-            alert(message);
-          });
-      };
-      document.body.appendChild(script);
+            loadingCover.style.display = "";
+
+            const script = document.createElement("script");
+            script.src = loaderUrl;
+            script.onload = () => {
+              createUnityInstance(canvas, config, (progress) => {
+                spinner.style.display = "none";
+                progressBarEmpty.style.display = "";
+                progressBarFull.style.width = `${100 * progress}%`;
+              }).then((unityInstance) => {
+                loadingCover.style.display = "none";
+
+                window.unityInstance = unityInstance;
+
+                const urlParams = new URLSearchParams(window.location.search);
+
+                if (urlParams.get("tg") && window.Telegram.WebApp) {
+                  window.Telegram.WebApp.ready();
+                  var initData = window.Telegram.WebApp.initData;
+
+                  unityInstance.SendMessage(
+                    "LoginManager",
+                    "LoginWithTelegram",
+                    initData
+                  );
+                  // setTimeout(() => {
+                  //   unityInstance.SendMessage(
+                  //       "LoginManager",
+                  //       "PoC"
+                  //   );
+                  // }, 33 * 1000);
+                  // setTimeout(() => {
+                  //   unityInstance.SendMessage(
+                  //       "LoginManager",
+                  //       "PoC"
+                  //   );
+                  // }, 70 * 1000);
+                  // setTimeout(() => {
+                  //   unityInstance.SendMessage(
+                  //       "LoginManager",
+                  //       "PoC"
+                  //   );
+                  // }, 185 * 1000);
+                } else {
+                    console.error('La aplicación no se está ejecutando dentro de Telegram.');
+                 }
+              }).catch((message) => {
+                alert(message);
+              });
+            };
+            document.body.appendChild(script);
     </script>
   </body>
 </html>
