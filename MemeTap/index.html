@@ -7,7 +7,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
-    <title>ZappPlay</title>
+    <title>MemeTap</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico" />
     <link rel="stylesheet" href="TemplateData/style.css" />
 
@@ -38,7 +38,7 @@
               codeUrl: buildUrl + "/MemeTap.wasm",
               streamingAssetsUrl: "StreamingAssets",
               companyName: "Fusyona",
-              productName: "ZappPlay",
+              productName: "MemeTap",
               productVersion: "1.0",
             };
 
@@ -89,7 +89,7 @@
                   var initData = window.Telegram.WebApp.initData;
 
                   unityInstance.SendMessage(
-                    "LoginManager",
+                    "MobilePanel",
                     "LoginWithTelegram",
                     initData
                   );
